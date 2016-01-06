@@ -1,0 +1,105 @@
+@import {
+	namespace JSON {
+		const stringify dynamic
+	}
+}
+
+@export
+class VectorClock {
+	var _valueByProcess StringMap<int>
+
+	def new(valueByProcess StringMap<int>) {
+		self._valueByProcess = valueByProcess
+	}
+
+	def toJson string {
+		return JSON.stringify(self._valueByProcess)
+	}
+
+	def get(key string) int {
+		if key in _valueByProcess {
+			return _valueByProcess[key]
+		}
+
+		# All values are implicitly 0 by default
+		return 0
+	}
+
+	def increment(nodeId string) {
+		if !(nodeId in self._valueByProcess) {
+			self._valueByProcess[nodeId] = 0
+		}
+		self._valueByProcess[nodeId] += 1
+	}
+
+	def isConcurrentWith(other VectorClock) bool {
+		return self <=> other == 0
+	}
+
+	# For every key in other, take the maximum corresponding
+	# value from self or other
+	def takeMaximums(other VectorClock) {
+		for key in other._valueByProcess.keys {
+			_valueByProcess[key] = Math.max(self.get(key), other.get(key))
+		}
+	}
+
+	# Returns true if the values in each clock are identical
+	def equals(other VectorClock) bool {
+		for key in self._valueByProcess.keys {
+			if self.get(key) != other.get(key) {
+				return false
+			}
+		}
+
+		for key in other._valueByProcess.keys {
+			if self.get(key) != other.get(key) {
+				return false
+			}
+		}
+
+		return true
+	}
+
+	# return -1 if self < other
+	# returns 1 if self > other
+	# returns 0 if self.equals(other) or self.isConcurrentWith(other)
+	def <=>(other VectorClock) int {
+
+		# Build up a list of all keys in either clock
+		var keys = self._valueByProcess.keys
+		for key in other._valueByProcess.keys {
+			keys.appendOne(key)
+		}
+
+		var foundSelfValueGreater = false
+		var foundSelfValueLessThan = false
+		for key in keys {
+			var selfValue = self.get(key)
+			var otherValue = other.get(key)
+
+			if selfValue > otherValue {
+				foundSelfValueGreater = true
+			} else if selfValue < otherValue {
+				foundSelfValueLessThan = true
+			}
+		}
+
+		if foundSelfValueGreater && !foundSelfValueLessThan {
+			# At least one value of self is strictly greater than a
+			# value in other, and no value of self is strictly less
+			# than other
+			return 1
+		}
+
+		if !foundSelfValueGreater && foundSelfValueLessThan {
+			# At least one value of self is strictly less than a
+			# value in other, and no value of self is strictly greater
+			# than other
+			return -1
+		}
+
+		# We can't order these two clocks. We return equal/concurrent.
+		return 0
+	}
+}

@@ -1,0 +1,22 @@
+# Nothing here yet because I haven't gotten the skew compiler to work yet
+
+@import {
+	def describe(desc string, func dynamic)
+	def it(desc string, func dynamic)
+
+	namespace console {
+		const log dynamic
+	}
+}
+
+@entry
+def main {
+	describe("thing", () => {
+		describe("more", () => {
+			it("huh", () => {
+				console.log("hi")
+			})
+		})
+	})
+}
+

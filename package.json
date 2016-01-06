@@ -1,0 +1,11 @@
+{
+  "name": "vectorclock.sk",
+  "version": "0.1.0",
+  "description": "Vector clock implementation in Skew",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "skew": "latest",
+    "mocha": "latest"
+  }
+}
