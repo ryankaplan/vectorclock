@@ -9,7 +9,7 @@ var buildDir = 'bin';
 
 function compileSkewSources(sources, outputFile, done) {
   jake.exec(
-    '$(npm bin)/skewc ' + sources.join(' ') + ' --output-file=' + outputFile + ' --release',
+    '$(npm bin)/skewc ' + sources.join(' ') + ' --output-file=' + outputFile,
     { printStdout: true },
     done
   );

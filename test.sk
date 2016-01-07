@@ -10,11 +10,13 @@
 }
 
 @entry
-def main {
+def testMain {
 	describe("thing", () => {
 		describe("more", () => {
 			it("huh", () => {
-				console.log("hi")
+				var vc1 = VectorClock.new("site1")
+				var vc2 = VectorClock.new("site2")
+				vc1.currentTime <=> vc2.currentTime
 			})
 		})
 	})
