@@ -11,13 +11,44 @@
 
 @entry
 def testMain {
-	describe("thing", () => {
-		describe("more", () => {
-			it("huh", () => {
-				var vc1 = VectorClock.new("site1")
-				var vc2 = VectorClock.new("site2")
-				vc1.currentTime <=> vc2.currentTime
-			})
+	describe("VectorClock tests", () => {
+		it("VectorClock.Time.get", () => {
+			var vc = VectorClock.new("site1")
+			assert(vc.currentTime.get("bogus site id") == 0)
+
+			vc.tick
+			assert(vc.currentTime.get("site1") == 1)
+			assert(vc.currentTime.get("bogus site id") == 0)
+
+			vc = VectorClock.new("site1", VectorClock.Time.new({
+				"site1": 60
+			}))
+
+			assert(vc.currentTime.get("site1") == 60)
+			vc.tick
+			assert(vc.currentTime.get("site1") == 61)
+		})
+
+		it("VectorClock.Time.toJson", () => {
+			var vc1 = VectorClock.new("site1", VectorClock.Time.new({
+				"site1": 60,
+				"site2": 273
+			}))
+
+			var timeCopy = VectorClock.Time.new(vc1.currentTime.toJson)
+			assert(vc1.currentTime.equals(timeCopy))
+		})
+
+		it("VectorClock.Time.<=> and isConcurrentWith", () => {
+			# TODO(ryan)
+		})
+
+		it("VectorClock.Time.TakeMaximums", () => {
+			# TODO(ryan)
+		})
+
+		it("VectorClock.Time.equals", () => {
+			# TODO(ryan)
 		})
 	})
 }

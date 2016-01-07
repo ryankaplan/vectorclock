@@ -1,6 +1,7 @@
 @import {
 	namespace JSON {
 		const stringify dynamic
+		const parse dynamic
 	}
 }
 
@@ -43,16 +44,12 @@ class VectorClock.Time {
 	def new { _countBySiteId = {} }
 	def new(timeJson StringMap<int>) { _countBySiteId = timeJson }
 
-	def toJson dynamic { return JSON.stringify(self._countBySiteId) }
-	def fromJson(json StringMap<int>) Time { return Time.new(json) }
+	def toJson dynamic {
+		return JSON.parse(JSON.stringify(self._countBySiteId))
+	}
 
 	def get(key string) int {
-		if key in _countBySiteId {
-			return _countBySiteId[key]
-		}
-
-		# All values are implicitly 0 by default
-		return 0
+		return _countBySiteId.get(key, 0)
 	}
 
 	def increment(siteId string) {
