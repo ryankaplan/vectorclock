@@ -17,9 +17,11 @@ Here are my suggestions for how to learn more:
 
 ## Documentation
 
-There are two classes: `VectorClock` and `VectorClock.Time`. Each site initializes a
-`VectorClock` with its `siteId`. Before any message is sent, the site calls `tick`
-and when any message is received, the site calls `tickAndMerge`.
+There are two classes: `VectorClock` and `VectorClock.Time`.
+
+Each site should initialize a `VectorClock` with its `siteId`. Before each message is sent
+from the site, it calls `tick`. When a message is received at that site, it calls
+`tickAndMerge`.
 
 ```
 class VectorClock {
@@ -73,7 +75,8 @@ class VectorClock.Time {
 
 # Other implementations
 
-I looked at a few other implementations before writing this.
+I looked at a few other implementations before writing this. They may be
+interesting/useful to you too.
 
 - https://github.com/mixu/vectorclock
 - https://github.com/AWinterman/vector-clock
