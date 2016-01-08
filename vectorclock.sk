@@ -71,7 +71,9 @@ class VectorClock.Time {
 		}
 	}
 
-	# Returns true if the values in each clock are identical
+	# Returns true if the values in each clock are all the same
+	# (implicit values are counted as well, so { site1: 0 } is
+	# considered equal to {})
 	def equals(other Time) bool {
 		for key in self._countBySiteId.keys {
 			if self.get(key) != other.get(key) {

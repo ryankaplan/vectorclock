@@ -40,15 +40,91 @@ def testMain {
 		})
 
 		it("VectorClock.Time.<=> and isConcurrentWith", () => {
-			# TODO(ryan)
+			# Test concurrent times because they're equal
+			assert(VectorClock.Time.new({
+				"site1": 1,
+				"site2": 0
+			}).isConcurrentWith(VectorClock.Time.new({
+				"site1": 1
+				# site2 should implicitly be 0
+			})))
+
+			# Test concurrent times that aren't equal
+			assert(VectorClock.Time.new({
+				"site1": 0,
+				"site2": 1
+			}).isConcurrentWith(VectorClock.Time.new({
+				"site1": 1,
+				"site2": 0
+			})))
+
+			# Test a <=> b == 1
+			assert(VectorClock.Time.new({
+				"site1": 1,
+				"site2": 2
+			}) <=> (VectorClock.Time.new({
+				"site1": 1,
+				"site2": 1
+			})) == 1)
+
+			# Test a <=> b == -1
+			assert(VectorClock.Time.new({
+				"site1": 1,
+				"site2": 1
+			}) <=> (VectorClock.Time.new({
+				"site1": 2,
+				"site2": 1
+			})) == -1)
 		})
 
 		it("VectorClock.Time.TakeMaximums", () => {
-			# TODO(ryan)
+			var vc = VectorClock.Time.new({
+				"site1": 1,
+				"site2": 0
+			})
+			vc.takeMaximums(VectorClock.Time.new({
+				"site1": 0,
+				"site2": 1
+			}))
+			assert(vc.equals(VectorClock.Time.new({
+				"site1": 1,
+				"site2": 1
+			})))
 		})
 
 		it("VectorClock.Time.equals", () => {
-			# TODO(ryan)
+			# Empty times should be identical
+			assert(VectorClock.Time.new({}).equals(VectorClock.Time.new({})))
+
+			# Implicit values of 0 are ok and don't make clocks unequal
+			assert(VectorClock.Time.new({
+				"site1": 0
+			}).equals(VectorClock.Time.new({})))
+
+			assert(VectorClock.Time.new({
+				"site1": 0,
+				"site2": 1
+			}).equals(VectorClock.Time.new({
+				"site2": 1
+			})))
+
+			# Simple case of non-equal times
+			assert(!VectorClock.Time.new({
+				"site1": 1,
+				"site2": 2
+			}).equals(VectorClock.Time.new({
+				"site2": 2
+			})))
+
+			# Concurrent times which are non-equal
+			# Simple case of non-equal times
+			assert(!VectorClock.Time.new({
+				"site1": 1,
+				"site2": 2
+			}).equals(VectorClock.Time.new({
+				"site1": 2,
+				"site2": 1
+			})))
 		})
 	})
 }
