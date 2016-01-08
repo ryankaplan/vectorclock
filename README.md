@@ -1,8 +1,17 @@
 # vectorclock.sk
 
 This is a simple vector clock implementation written in [Skew](http://skew-lang.org/).
-Skew is a language that compiles to Javascript and C#, and will soon compile to C++
-too.
+
+What is Skew? Skew is a language that compiles to Javascript and C#, and will soon compile
+to C++ too.
+
+What are vector clocks? They're a data structure that help you determine a rough sense of
+"this event" caused "that event" in distributed systems. Formally: they help you generate
+a partial ordering (aka a directed acyclic graph) on the events in your system.
+
+Go [here](http://www.cs.rutgers.edu/~pxk/417/notes/clocks/) if you're interested in their formal description/theory.
+Go [here](http://basho.com/posts/technical/why-vector-clocks-are-easy/) if you're interested in a high level description of their applications.
+Go [here](http://basho.com/posts/technical/why-vector-clocks-are-hard/) if you're interested in a detailed description of how to use them.
 
 ## Documentation
 
@@ -62,7 +71,7 @@ class VectorClock.Time {
 
 # Other implementations
 
-I looked at a few other implementations out of curiousity before writing this:
+I looked at a few other implementations before writing this.
 
 - https://github.com/mixu/vectorclock
 - https://github.com/AWinterman/vector-clock
